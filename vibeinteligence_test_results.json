@@ -1,0 +1,392 @@
+{
+  "name": "VibeIntelligence",
+  "path": "/Users/wojciechwiesner/ai/VibeIntelligence/backend",
+  "languages": [
+    "python"
+  ],
+  "code_analysis": {
+    "code_quality": {
+      "overall_score": 6.7,
+      "architecture_pattern": "Flat/Simple",
+      "modularity_score": 4,
+      "complexity_metrics": {
+        "avg_cyclomatic": 2.34,
+        "avg_cognitive": 1.6,
+        "max_complexity_file": "/Users/wojciechwiesner/ai/VibeIntelligence/backend/src/agents/task_suggester_agent.py",
+        "max_complexity_value": 14
+      },
+      "readability": {
+        "score": 7.0,
+        "naming_conventions": "good",
+        "avg_function_length": 10,
+        "documentation_coverage": 0.5
+      },
+      "best_practices": {
+        "error_handling_coverage": 0.65,
+        "logging_present": true,
+        "security_patterns": []
+      },
+      "debt_indicators": {
+        "todo_count": 10,
+        "fixme_count": 0,
+        "hack_count": 0,
+        "deprecated_apis": [
+          "md5 (deprecated crypto)"
+        ],
+        "code_duplication_estimate": "low"
+      },
+      "fundamental_issues": [
+        {
+          "severity": "HIGH",
+          "category": "security",
+          "description": "Code execution vulnerability (exec)",
+          "file": "/Users/wojciechwiesner/ai/VibeIntelligence/backend/htmlcov/coverage_html_cb_6fb7b396.js",
+          "line": 234,
+          "snippet": "const match = /\\.([0-9]+)/.exec(cell.textContent);"
+        },
+        {
+          "severity": "HIGH",
+          "category": "security",
+          "description": "Hardcoded authentication token detected",
+          "file": "/Users/wojciechwiesner/ai/VibeIntelligence/backend/tests/unit/ai/test_orchestrator.py",
+          "line": 25,
+          "snippet": "mock_settings.HUGGINGFACE_API_TOKEN = \"test-token\""
+        }
+      ]
+    }
+  },
+  "deployment_analysis": {
+    "deployment": {
+      "readiness_score": 7,
+      "is_deployable": true,
+      "deployment_type": "docker",
+      "target_platform": "borg.tools",
+      "detected_artifacts": {
+        "dockerfile": true,
+        "docker_compose": false,
+        "requirements_txt": true,
+        "package_json": false,
+        "env_example": false
+      },
+      "environment_vars": [
+        {
+          "name": "ANDROID_DATA",
+          "required": true,
+          "documented": false
+        },
+        {
+          "name": "ANDROID_ROOT",
+          "required": true,
+          "documented": false
+        },
+        {
+          "name": "APPENGINE_RUNTIME",
+          "required": true,
+          "documented": false
+        },
+        {
+          "name": "COMP_CWORD",
+          "required": true,
+          "documented": false
+        },
+        {
+          "name": "COMP_WORDS",
+          "required": true,
+          "documented": false
+        },
+        {
+          "name": "CURL_CA_BUNDLE",
+          "required": true,
+          "documented": false
+        },
+        {
+          "name": "DATABRICKS_RUNTIME_VERSION",
+          "required": true,
+          "documented": false
+        },
+        {
+          "name": "EDITOR",
+          "required": true,
+          "documented": false
+        },
+        {
+          "name": "ENSUREPIP_OPTIONS",
+          "required": true,
+          "documented": false
+        },
+        {
+          "name": "MSGPACK_PUREPYTHON",
+          "required": true,
+          "documented": false
+        },
+        {
+          "name": "NETRC",
+          "required": true,
+          "documented": false
+        },
+        {
+          "name": "PATH",
+          "required": true,
+          "documented": false
+        },
+        {
+          "name": "PATHEXT",
+          "required": true,
+          "documented": false
+        },
+        {
+          "name": "PIP_BUILD_TRACKER",
+          "required": true,
+          "documented": false
+        },
+        {
+          "name": "PIP_CONFIG_FILE",
+          "required": true,
+          "documented": false
+        },
+        {
+          "name": "PIP_EXISTS_ACTION",
+          "required": true,
+          "documented": false
+        },
+        {
+          "name": "PIP_NO_INPUT",
+          "required": true,
+          "documented": false
+        },
+        {
+          "name": "PIP_USER_AGENT_USER_DATA",
+          "required": true,
+          "documented": false
+        },
+        {
+          "name": "PREFIX",
+          "required": true,
+          "documented": false
+        },
+        {
+          "name": "PYTHON_EGG_CACHE",
+          "required": true,
+          "documented": false
+        },
+        {
+          "name": "REQUESTS_CA_BUNDLE",
+          "required": true,
+          "documented": false
+        },
+        {
+          "name": "SHELL",
+          "required": true,
+          "documented": false
+        },
+        {
+          "name": "SOURCE_DATE_EPOCH",
+          "required": true,
+          "documented": false
+        },
+        {
+          "name": "SSLKEYLOGFILE",
+          "required": true,
+          "documented": false
+        },
+        {
+          "name": "UNIXCONFDIR",
+          "required": true,
+          "documented": false
+        },
+        {
+          "name": "UNIXUSRLIBDIR",
+          "required": true,
+          "documented": false
+        },
+        {
+          "name": "USERPROFILE",
+          "required": true,
+          "documented": false
+        },
+        {
+          "name": "VISUAL",
+          "required": true,
+          "documented": false
+        },
+        {
+          "name": "VSCMD_ARG_TGT_ARCH",
+          "required": true,
+          "documented": false
+        },
+        {
+          "name": "XDG_CACHE_HOME",
+          "required": true,
+          "documented": false
+        },
+        {
+          "name": "XDG_CONFIG_DIRS",
+          "required": true,
+          "documented": false
+        },
+        {
+          "name": "XDG_CONFIG_HOME",
+          "required": true,
+          "documented": false
+        },
+        {
+          "name": "XDG_DATA_DIRS",
+          "required": true,
+          "documented": false
+        },
+        {
+          "name": "XDG_DATA_HOME",
+          "required": true,
+          "documented": false
+        },
+        {
+          "name": "XDG_RUNTIME_DIR",
+          "required": true,
+          "documented": false
+        },
+        {
+          "name": "XDG_STATE_HOME",
+          "required": true,
+          "documented": false
+        },
+        {
+          "name": "_PIP_RUNNING_IN_SUBPROCESS",
+          "required": true,
+          "documented": false
+        },
+        {
+          "name": "_PIP_USE_IMPORTLIB_METADATA",
+          "required": true,
+          "documented": false
+        },
+        {
+          "name": "_PYPROJECT_HOOKS_BACKEND_PATH",
+          "required": true,
+          "documented": false
+        },
+        {
+          "name": "_PYPROJECT_HOOKS_BUILD_BACKEND",
+          "required": true,
+          "documented": false
+        },
+        {
+          "name": "_PYTHON_HOST_PLATFORM",
+          "required": true,
+          "documented": false
+        },
+        {
+          "name": "__PYVENV_LAUNCHER__",
+          "required": true,
+          "documented": false
+        },
+        {
+          "name": "windir",
+          "required": true,
+          "documented": false
+        }
+      ],
+      "ports": [
+        8000
+      ],
+      "services": [],
+      "build_validation": {
+        "has_build_script": false,
+        "build_command": null,
+        "build_success_testable": false
+      },
+      "blockers": [
+        {
+          "severity": "HIGH",
+          "category": "environment",
+          "description": "43 undocumented environment variables",
+          "estimated_fix_time_hours": 1,
+          "suggestion": "Create .env.example with: ANDROID_DATA, ANDROID_ROOT, APPENGINE_RUNTIME, COMP_CWORD, COMP_WORDS"
+        },
+        {
+          "severity": "MEDIUM",
+          "category": "build",
+          "description": "No build script detected",
+          "estimated_fix_time_hours": 1,
+          "suggestion": "Add Makefile or npm build script for consistent builds"
+        }
+      ],
+      "mvp_checklist": [
+        {
+          "task": "Create Dockerfile",
+          "status": "done",
+          "time_hours": 0
+        },
+        {
+          "task": "Create ",
+          "status": "missing",
+          "time_hours": 1
+        },
+        {
+          "task": "Add Makefile or npm build script for consistent builds",
+          "status": "pending",
+          "time_hours": 1
+        },
+        {
+          "task": "Test local deployment",
+          "status": "pending",
+          "time_hours": 1
+        },
+        {
+          "task": "Document deployment process",
+          "status": "pending",
+          "time_hours": 0.5
+        }
+      ],
+      "estimated_hours_to_mvp": 3.5,
+      "deployment_instructions": "# Deployment to borg.tools\n\n1. Build Docker image:\n   docker build -t project-name .\n\n2. Test locally:\n   docker run -p 8080:8080 project-name\n\n3. Deploy to borg.tools:\n   scp Dockerfile vizi@borg.tools:~/projects/project-name/\n   ssh vizi@borg.tools 'cd ~/projects/project-name && docker build -t project-name . && docker run -d -p 8080:8080 project-name'\n\n4. Verify deployment:\n   curl https://borg.tools/project-name/health\n"
+    }
+  },
+  "doc_analysis": {
+    "documentation": {
+      "overall_score": 2,
+      "completeness": 0.0,
+      "accuracy": 1.0,
+      "found_docs": {
+        "readme": {
+          "exists": false,
+          "missing_sections": [
+            "Installation",
+            "Usage",
+            "Configuration",
+            "API",
+            "Testing",
+            "Deployment",
+            "Contributing",
+            "License"
+          ]
+        },
+        "api_docs": {
+          "exists": false,
+          "detected_endpoints": 56,
+          "documented_endpoints": 0
+        },
+        "changelog": {
+          "exists": false
+        },
+        "contributing": {
+          "exists": false,
+          "path": null
+        },
+        "license": {
+          "exists": false,
+          "path": null
+        }
+      },
+      "accuracy_issues": [],
+      "auto_generated_sections": {
+        "Installation": "# Quick Start\n\n## Installation\n```bash\npip install -r requirements.txt\n```\n\n## Run\n```bash\npython main.py\n```\n",
+        "Usage": "# Usage\n\nSee Quick Start section for basic usage.\n",
+        "API Documentation": "# API Endpoints\n\n\n## /\n\n**GET** - Defined in `src/main.py`\n\n_Description: (auto-generated, needs manual review)_\n\n**GET** - Defined in `src/api/deployments.py`\n\n_Description: (auto-generated, needs manual review)_\n\n**GET** - Defined in `src/api/projects.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /active-ports\n\n**GET** - Defined in `src/api/deployments.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /agents\n\n**GET** - Defined in `src/api/agents.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /agents/{agent_type}\n\n**GET** - Defined in `src/api/agents.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /analyze-duplicates\n\n**POST** - Defined in `src/api/scanner.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /analyze-project\n\n**POST** - Defined in `src/api/ai.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /analyzer/analyze-code\n\n**POST** - Defined in `src/api/agents.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /chat\n\n**POST** - Defined in `src/api/ai.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /check-dei-compliance\n\n**POST** - Defined in `src/api/ai.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /check-port\n\n**POST** - Defined in `src/api/deployments.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /deploy\n\n**POST** - Defined in `src/api/deploy.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /documentation/summary\n\n**POST** - Defined in `src/api/agents.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /documentation/update-readme\n\n**POST** - Defined in `src/api/agents.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /duplicates\n\n**GET** - Defined in `src/api/projects.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /eco-impact\n\n**GET** - Defined in `src/api/ai.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /environments\n\n**GET** - Defined in `src/api/deploy.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /generate\n\n**POST** - Defined in `src/api/documentation.py`\n\n_Description: (auto-generated, needs manual review)_\n\n**POST** - Defined in `src/api/ai.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /generate-adhd-summary\n\n**POST** - Defined in `src/api/ai.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /generate-documentation\n\n**POST** - Defined in `src/api/ai.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /health\n\n**GET** - Defined in `src/api/health.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /health/detailed\n\n**GET** - Defined in `src/api/health.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /last-scan\n\n**GET** - Defined in `src/api/scanner.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /monetization/find-opportunities\n\n**POST** - Defined in `src/api/agents.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /project-suggestions/{project_id}\n\n**GET** - Defined in `src/api/ai.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /project/{project_id}\n\n**GET** - Defined in `src/api/documentation.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /project/{project_id}/deployments\n\n**GET** - Defined in `src/api/deploy.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /quantum-idea\n\n**GET** - Defined in `src/api/ai.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /register/{port}\n\n**POST** - Defined in `src/api/deployments.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /scan\n\n**POST** - Defined in `src/api/scanner.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /scan/{scan_id}\n\n**GET** - Defined in `src/api/scanner.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /scanner/scan-project\n\n**POST** - Defined in `src/api/agents.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /stats\n\n**GET** - Defined in `src/api/ai.py`\n\n_Description: (auto-generated, needs manual review)_\n\n**GET** - Defined in `src/api/agents.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /stats/summary\n\n**GET** - Defined in `src/api/projects.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /status\n\n**GET** - Defined in `src/api/scanner.py`\n\n_Description: (auto-generated, needs manual review)_\n\n**GET** - Defined in `src/api/agents.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /status/{deployment_id}\n\n**GET** - Defined in `src/api/deploy.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /status/{task_id}\n\n**GET** - Defined in `src/api/documentation.py`\n\n_Description: (auto-generated, needs manual review)_\n\n**GET** - Defined in `src/api/scanner.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /sync-registry\n\n**POST** - Defined in `src/api/deployments.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /tasks\n\n**POST** - Defined in `src/api/agents.py`\n\n_Description: (auto-generated, needs manual review)_\n\n**GET** - Defined in `src/api/agents.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /tasks/break-down\n\n**POST** - Defined in `src/api/agents.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /tasks/suggest\n\n**POST** - Defined in `src/api/agents.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /tasks/{task_id}\n\n**GET** - Defined in `src/api/agents.py`\n\n_Description: (auto-generated, needs manual review)_\n\n**DELETE** - Defined in `src/api/agents.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /types\n\n**GET** - Defined in `src/api/deploy.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /vibe\n\n**POST** - Defined in `src/api/ai.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /vibe-check\n\n**GET** - Defined in `src/api/ai.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /{port}\n\n**DELETE** - Defined in `src/api/deployments.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /{project_id}\n\n**GET** - Defined in `src/api/projects.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /{project_id}/activate\n\n**PUT** - Defined in `src/api/projects.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /{project_id}/archive\n\n**PUT** - Defined in `src/api/projects.py`\n\n_Description: (auto-generated, needs manual review)_\n",
+        "Testing": "# Testing\n\n```bash\n# Run tests\npytest\n# or\npython -m pytest\n```\n",
+        "Deployment": "# Deployment\n\n_(Auto-generated placeholder - needs manual completion)_\n",
+        "Configuration": "# Configuration\n\n_(Auto-generated placeholder - needs manual completion)_\n",
+        "Contributing": "# Contributing\n\nContributions are welcome! Please feel free to submit a Pull Request.\n"
+      }
+    }
+  }
+}
