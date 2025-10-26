@@ -1,0 +1,315 @@
+# Agent Zero Complexity Analysis Workflow
+# Code metrics and maintainability analysis
+
+task:
+  name: complexity_analysis
+  type: metrics
+  description: "Analyze code complexity, maintainability, and technical debt"
+  timeout: 90  # seconds
+
+  tools:
+    - radon
+    - lizard
+    - eslint-complexity
+    - cloc
+
+  steps:
+    - name: Detect Project Languages
+      command: |
+        echo "Detecting project languages..."
+        if [ -f "package.json" ]; then
+          echo "LANG_JS=1" >> $AGENT_ZERO_ENV
+        fi
+        if [ -f "requirements.txt" ] || [ -f "pyproject.toml" ]; then
+          echo "LANG_PYTHON=1" >> $AGENT_ZERO_ENV
+        fi
+
+    - name: Install Python Complexity Tools
+      condition: "$LANG_PYTHON == 1"
+      command: |
+        echo "Installing Python complexity tools..."
+        pip install -q radon || true
+
+    - name: Install Cross-Language Tools
+      command: |
+        echo "Installing lizard (multi-language complexity analyzer)..."
+        pip install -q lizard || true
+
+    - name: Count Lines of Code
+      command: |
+        echo "Counting lines of code..."
+        python3 << 'EOF'
+import os
+from pathlib import Path
+
+stats = {
+    'total_lines': 0,
+    'code_lines': 0,
+    'comment_lines': 0,
+    'blank_lines': 0,
+    'files_by_extension': {}
+}
+
+exclude_patterns = ['.git/', 'node_modules/', '.venv/', '__pycache__/', 'dist/', 'build/', '.min.js', '.min.css']
+
+for root, dirs, files in os.walk('.'):
+    # Filter out excluded directories
+    dirs[:] = [d for d in dirs if not any(excl in os.path.join(root, d) for excl in exclude_patterns)]
+
+    for file in files:
+        ext = Path(file).suffix
+        if ext in ['.py', '.js', '.ts', '.jsx', '.tsx', '.go', '.rs', '.java', '.c', '.cpp', '.h']:
+            file_path = os.path.join(root, file)
+            try:
+                with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+                    lines = f.readlines()
+                    total = len(lines)
+                    blank = sum(1 for line in lines if not line.strip())
+
+                    # Simple comment detection (not perfect but good enough)
+                    in_multiline = False
+                    comment_count = 0
+                    for line in lines:
+                        stripped = line.strip()
+                        if ext in ['.py']:
+                            if '"""' in stripped or "'''" in stripped:
+                                in_multiline = not in_multiline
+                                comment_count += 1
+                            elif in_multiline or stripped.startswith('#'):
+                                comment_count += 1
+                        elif ext in ['.js', '.ts', '.jsx', '.tsx', '.java', '.c', '.cpp', '.go', '.rs']:
+                            if '/*' in stripped:
+                                in_multiline = True
+                                comment_count += 1
+                            elif '*/' in stripped:
+                                in_multiline = False
+                                comment_count += 1
+                            elif in_multiline or stripped.startswith('//'):
+                                comment_count += 1
+
+                    code = total - blank - comment_count
+
+                    stats['total_lines'] += total
+                    stats['blank_lines'] += blank
+                    stats['comment_lines'] += comment_count
+                    stats['code_lines'] += code
+
+                    stats['files_by_extension'][ext] = stats['files_by_extension'].get(ext, 0) + 1
+            except:
+                pass
+
+import json
+with open('/tmp/loc_stats.json', 'w') as f:
+    json.dump(stats, f, indent=2)
+
+print(f"Total lines: {stats['total_lines']}, Code: {stats['code_lines']}, Comments: {stats['comment_lines']}")
+EOF
+
+    - name: Run Radon Complexity Analysis
+      condition: "$LANG_PYTHON == 1"
+      command: |
+        echo "Running Radon complexity analysis..."
+        radon cc . -a -j 2>/dev/null > /tmp/radon_cc_results.json || echo '[]' > /tmp/radon_cc_results.json
+        radon mi . -j 2>/dev/null > /tmp/radon_mi_results.json || echo '{}' > /tmp/radon_mi_results.json
+
+    - name: Run Lizard Multi-Language Analysis
+      command: |
+        echo "Running Lizard complexity analysis..."
+        lizard -l python -l javascript -l cpp -l java -l go --json . 2>/dev/null > /tmp/lizard_results.json || echo '{"function_list": []}' > /tmp/lizard_results.json
+
+    - name: Analyze Function Lengths and Complexity
+      command: |
+        echo "Analyzing function complexity..."
+        python3 << 'EOF'
+import json
+import os
+from pathlib import Path
+
+complexity_data = {
+    'high_complexity_functions': [],
+    'long_functions': [],
+    'avg_complexity': 0.0,
+    'max_complexity': 0,
+    'total_functions': 0,
+    'maintainability_score': 0.0
+}
+
+# Parse Lizard results
+try:
+    with open('/tmp/lizard_results.json', 'r') as f:
+        lizard_data = json.load(f)
+        functions = lizard_data.get('function_list', [])
+
+        complexity_data['total_functions'] = len(functions)
+
+        if functions:
+            complexities = [f.get('cyclomatic_complexity', 0) for f in functions]
+            complexity_data['avg_complexity'] = sum(complexities) / len(complexities)
+            complexity_data['max_complexity'] = max(complexities)
+
+            # Flag high complexity functions (CC > 10)
+            for func in functions:
+                cc = func.get('cyclomatic_complexity', 0)
+                if cc > 10:
+                    complexity_data['high_complexity_functions'].append({
+                        'name': func.get('name', 'unknown'),
+                        'file': func.get('filename', ''),
+                        'line': func.get('start_line', 0),
+                        'complexity': cc,
+                        'lines': func.get('nloc', 0)
+                    })
+
+                # Flag long functions (> 50 lines)
+                if func.get('nloc', 0) > 50:
+                    complexity_data['long_functions'].append({
+                        'name': func.get('name', 'unknown'),
+                        'file': func.get('filename', ''),
+                        'lines': func.get('nloc', 0)
+                    })
+except Exception as e:
+    print(f"Error parsing Lizard results: {e}")
+
+# Parse Radon maintainability index
+try:
+    with open('/tmp/radon_mi_results.json', 'r') as f:
+        radon_mi_data = json.load(f)
+        mi_scores = []
+        for file_path, data in radon_mi_data.items():
+            if isinstance(data, dict) and 'mi' in data:
+                mi_scores.append(data['mi'])
+
+        if mi_scores:
+            complexity_data['maintainability_score'] = sum(mi_scores) / len(mi_scores)
+except:
+    pass
+
+# Calculate overall complexity warning level
+if complexity_data['avg_complexity'] > 15:
+    complexity_data['complexity_warning'] = 'HIGH'
+elif complexity_data['avg_complexity'] > 10:
+    complexity_data['complexity_warning'] = 'MEDIUM'
+else:
+    complexity_data['complexity_warning'] = 'LOW'
+
+with open('/tmp/complexity_data.json', 'w') as f:
+    json.dump(complexity_data, f, indent=2)
+
+print(json.dumps(complexity_data, indent=2))
+EOF
+
+    - name: Calculate Technical Debt Indicators
+      command: |
+        echo "Calculating technical debt..."
+        python3 << 'EOF'
+import json
+import os
+
+results = {
+    "complexity_score": 10.0,
+    "total_lines": 0,
+    "code_lines": 0,
+    "comment_ratio": 0.0,
+    "avg_cyclomatic_complexity": 0.0,
+    "high_complexity_count": 0,
+    "long_functions_count": 0,
+    "maintainability_index": 100.0,
+    "complexity_warnings": [],
+    "technical_debt_score": 0.0
+}
+
+# Load LOC stats
+try:
+    with open('/tmp/loc_stats.json', 'r') as f:
+        loc_data = json.load(f)
+        results['total_lines'] = loc_data.get('total_lines', 0)
+        results['code_lines'] = loc_data.get('code_lines', 0)
+
+        if results['code_lines'] > 0:
+            results['comment_ratio'] = loc_data.get('comment_lines', 0) / results['code_lines']
+except:
+    pass
+
+# Load complexity data
+try:
+    with open('/tmp/complexity_data.json', 'r') as f:
+        complexity_data = json.load(f)
+        results['avg_cyclomatic_complexity'] = complexity_data.get('avg_complexity', 0.0)
+        results['high_complexity_count'] = len(complexity_data.get('high_complexity_functions', []))
+        results['long_functions_count'] = len(complexity_data.get('long_functions', []))
+        results['maintainability_index'] = complexity_data.get('maintainability_score', 100.0)
+
+        # Copy warnings
+        for func in complexity_data.get('high_complexity_functions', [])[:10]:
+            results['complexity_warnings'].append({
+                'type': 'HIGH_COMPLEXITY',
+                'function': func.get('name', ''),
+                'file': func.get('file', ''),
+                'complexity': func.get('complexity', 0),
+                'recommendation': 'Consider refactoring to reduce complexity'
+            })
+
+        for func in complexity_data.get('long_functions', [])[:10]:
+            results['complexity_warnings'].append({
+                'type': 'LONG_FUNCTION',
+                'function': func.get('name', ''),
+                'file': func.get('file', ''),
+                'lines': func.get('lines', 0),
+                'recommendation': 'Consider breaking into smaller functions'
+            })
+except:
+    pass
+
+# Calculate complexity score (0-10)
+# Lower is worse
+penalty = 0.0
+
+# Penalize high average complexity
+if results['avg_cyclomatic_complexity'] > 20:
+    penalty += 3.0
+elif results['avg_cyclomatic_complexity'] > 15:
+    penalty += 2.0
+elif results['avg_cyclomatic_complexity'] > 10:
+    penalty += 1.0
+
+# Penalize many high-complexity functions
+penalty += min(3.0, results['high_complexity_count'] * 0.3)
+
+# Penalize low comment ratio
+if results['comment_ratio'] < 0.1:
+    penalty += 1.0
+
+# Penalize many long functions
+penalty += min(2.0, results['long_functions_count'] * 0.2)
+
+results['complexity_score'] = max(0.0, 10.0 - penalty)
+
+# Calculate technical debt score (0-100, lower is better)
+# Based on maintainability index, complexity, and code quality
+debt = 100.0
+if results['maintainability_index'] > 0:
+    debt = 100.0 - results['maintainability_index']
+
+debt += results['high_complexity_count'] * 2.0
+debt += results['long_functions_count']
+
+results['technical_debt_score'] = min(100.0, debt)
+
+with open('/tmp/complexity_analysis_results.json', 'w') as f:
+    json.dump(results, f, indent=2)
+
+print(json.dumps(results, indent=2))
+EOF
+
+    - name: Generate Complexity Report
+      command: |
+        cat /tmp/complexity_analysis_results.json
+
+  output:
+    format: json
+    file: /tmp/complexity_analysis_results.json
+
+  result_mapping:
+    complexity_score: "complexity_score"
+    avg_complexity: "avg_cyclomatic_complexity"
+    technical_debt: "technical_debt_score"
+    high_complexity_functions: "high_complexity_count"

@@ -1,0 +1,182 @@
+[
+  {
+    "facts": {
+      "name": "sample_project_1",
+      "path": "/Users/wojciechwiesner/ai/sample_project_1",
+      "languages": ["python", "javascript"],
+      "has_readme": true,
+      "has_license": true,
+      "has_tests": true,
+      "has_ci": true,
+      "last_commit_dt": "2025-10-20T10:30:00",
+      "commits_count": 45,
+      "branches_count": 3,
+      "todos": ["Add API documentation", "Implement caching"],
+      "deps": {
+        "python": ["flask", "requests", "pytest"],
+        "node": ["express", "jest"]
+      }
+    },
+    "scores": {
+      "stage": "beta",
+      "value_score": 9,
+      "risk_score": 2,
+      "priority": 15,
+      "fundamental_errors": []
+    },
+    "suggestions": {
+      "description": "A full-stack web application with REST API and modern frontend",
+      "monetization_potential": "SaaS subscription model - $50-100/user/month",
+      "vibe_notes": "Well-structured, production-ready code",
+      "todo_now": ["Deploy to staging", "Set up monitoring"],
+      "todo_next": ["Add payment integration", "Implement analytics"]
+    }
+  },
+  {
+    "facts": {
+      "name": "legacy_project",
+      "path": "/Users/wojciechwiesner/ai/legacy_project",
+      "languages": ["python"],
+      "has_readme": false,
+      "has_license": false,
+      "has_tests": false,
+      "has_ci": false,
+      "last_commit_dt": "2024-05-10T14:20:00",
+      "commits_count": 12,
+      "branches_count": 1,
+      "todos": [],
+      "deps": {
+        "python": ["django", "celery"]
+      }
+    },
+    "scores": {
+      "stage": "prototype",
+      "value_score": 4,
+      "risk_score": 8,
+      "priority": 5,
+      "fundamental_errors": ["No LICENSE", "No tests", "No CI/CD"]
+    },
+    "suggestions": {
+      "description": "Legacy Django application needing modernization",
+      "monetization_potential": "Low - requires significant refactoring",
+      "vibe_notes": "Technical debt detected, needs cleanup",
+      "todo_now": ["Add README", "Add LICENSE", "Set up tests"],
+      "todo_next": ["Modernize dependencies", "Add CI/CD"]
+    }
+  },
+  {
+    "facts": {
+      "name": "borg_tools_integration",
+      "path": "/Users/wojciechwiesner/ai/borg_tools_integration",
+      "languages": ["typescript", "python"],
+      "has_readme": true,
+      "has_license": true,
+      "has_tests": true,
+      "has_ci": true,
+      "last_commit_dt": "2025-10-24T16:45:00",
+      "commits_count": 89,
+      "branches_count": 5,
+      "todos": ["Add OpenAPI specs", "Implement webhooks"],
+      "deps": {
+        "python": ["fastapi", "pydantic", "sqlalchemy"],
+        "node": ["typescript", "axios", "zod"]
+      }
+    },
+    "scores": {
+      "stage": "mvp",
+      "value_score": 8,
+      "risk_score": 3,
+      "priority": 13,
+      "fundamental_errors": [],
+      "code_quality_score": 8.5,
+      "deployment_readiness_score": 9,
+      "documentation_score": 8,
+      "borg_fit_score": 9,
+      "mvp_proximity_score": 8,
+      "monetization_viability_score": 8
+    },
+    "suggestions": {
+      "description": "Integration platform for Borg.tools ecosystem with REST API",
+      "monetization_potential": "Platform fee model - 2-5% of transactions",
+      "vibe_notes": "Excellent fit for Borg.tools ecosystem",
+      "todo_now": ["Deploy to production", "Add monitoring"],
+      "todo_next": ["Scale infrastructure", "Add enterprise features"]
+    }
+  },
+  {
+    "facts": {
+      "name": "ml_experiment",
+      "path": "/Users/wojciechwiesner/ai/ml_experiment",
+      "languages": ["python", "jupyter"],
+      "has_readme": true,
+      "has_license": false,
+      "has_tests": false,
+      "has_ci": false,
+      "last_commit_dt": "2025-10-15T09:10:00",
+      "commits_count": 23,
+      "branches_count": 2,
+      "todos": ["Convert notebooks to scripts", "Add model versioning"],
+      "deps": {
+        "python": ["torch", "transformers", "scikit-learn", "pandas", "numpy"]
+      }
+    },
+    "scores": {
+      "stage": "prototype",
+      "value_score": 6,
+      "risk_score": 5,
+      "priority": 8,
+      "fundamental_errors": ["No LICENSE", "No tests"],
+      "code_quality_score": 5,
+      "deployment_readiness_score": 4,
+      "documentation_score": 6,
+      "borg_fit_score": 7,
+      "mvp_proximity_score": 4,
+      "monetization_viability_score": 6
+    },
+    "suggestions": {
+      "description": "Machine learning experiment for text classification",
+      "monetization_potential": "API service - $0.01-0.05 per request",
+      "vibe_notes": "Interesting concept, needs production hardening",
+      "todo_now": ["Add tests", "Productionize code"],
+      "todo_next": ["Deploy as API", "Add model monitoring"]
+    }
+  },
+  {
+    "facts": {
+      "name": "microservice_starter",
+      "path": "/Users/wojciechwiesner/ai/microservice_starter",
+      "languages": ["go", "docker"],
+      "has_readme": true,
+      "has_license": true,
+      "has_tests": true,
+      "has_ci": true,
+      "last_commit_dt": "2025-10-22T11:30:00",
+      "commits_count": 67,
+      "branches_count": 4,
+      "todos": [],
+      "deps": {
+        "go": ["gin", "gorm", "testify"]
+      }
+    },
+    "scores": {
+      "stage": "production",
+      "value_score": 9,
+      "risk_score": 1,
+      "priority": 16,
+      "fundamental_errors": [],
+      "code_quality_score": 9,
+      "deployment_readiness_score": 10,
+      "documentation_score": 9,
+      "borg_fit_score": 8,
+      "mvp_proximity_score": 10,
+      "monetization_viability_score": 7
+    },
+    "suggestions": {
+      "description": "Production-ready microservice template in Go",
+      "monetization_potential": "Template marketplace - $99-299 one-time",
+      "vibe_notes": "Excellent code quality, ready for distribution",
+      "todo_now": ["Publish to marketplace"],
+      "todo_next": ["Create documentation site", "Add examples"]
+    }
+  }
+]

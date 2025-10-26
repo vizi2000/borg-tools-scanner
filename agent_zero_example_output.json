@@ -1,0 +1,85 @@
+{
+  "without_agent_zero": {
+    "facts": {
+      "name": "_Borg.tools_scan",
+      "path": "/Users/wojciechwiesner/ai/_Borg.tools_scan",
+      "languages": [
+        "python"
+      ],
+      "has_readme": true,
+      "has_tests": true,
+      "has_ci": false
+    },
+    "scores": {
+      "stage": "mvp",
+      "value_score": 7,
+      "risk_score": 4,
+      "priority": 12
+    }
+  },
+  "with_agent_zero": {
+    "facts": {
+      "name": "_Borg.tools_scan",
+      "path": "/Users/wojciechwiesner/ai/_Borg.tools_scan",
+      "languages": [
+        "python"
+      ],
+      "has_readme": true,
+      "has_tests": true,
+      "has_ci": false
+    },
+    "scores": {
+      "stage": "mvp",
+      "value_score": 11,
+      "risk_score": 4,
+      "priority": 12,
+      "code_quality_score": 8.200000000000001,
+      "agent_zero_audit": {
+        "overall_score": 8.200000000000001,
+        "bonus_applied": 4.0,
+        "code_quality": {
+          "score": 7.9,
+          "pylint_score": 7.8,
+          "errors": 10,
+          "warnings": 20
+        },
+        "security": {
+          "score": 8.2,
+          "high_severity": 1,
+          "medium_severity": 3,
+          "low_severity": 7,
+          "secrets_found": 0,
+          "vulnerable_deps": 2,
+          "critical_issues": [
+            {
+              "severity": "HIGH",
+              "file": "app.py",
+              "line": 45,
+              "issue": "Potential SQL injection",
+              "source": "semgrep"
+            }
+          ]
+        },
+        "complexity": {
+          "score": 8.5,
+          "avg_complexity": 8.3,
+          "high_complexity_count": 3,
+          "technical_debt": 25.4,
+          "maintainability_index": 74.6,
+          "warnings": [
+            {
+              "type": "HIGH_COMPLEXITY",
+              "function": "process_data",
+              "file": "processor.py",
+              "complexity": 15,
+              "recommendation": "Consider refactoring to reduce complexity"
+            }
+          ]
+        },
+        "recommendations": [
+          "Fix 1 high-severity security issues immediately."
+        ]
+      }
+    }
+  }
+}

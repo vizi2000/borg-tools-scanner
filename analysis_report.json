@@ -1,0 +1,308 @@
+{
+  "project_name": "_Borg.tools_scan",
+  "project_path": "/Users/wojciechwiesner/ai/_Borg.tools_scan",
+  "languages": [
+    "python"
+  ],
+  "code_analysis": {
+    "code_quality": {
+      "overall_score": 6.2,
+      "architecture_pattern": "Feature-based",
+      "modularity_score": 8,
+      "complexity_metrics": {
+        "avg_cyclomatic": 3.76,
+        "avg_cognitive": 2.6,
+        "max_complexity_file": "/Users/wojciechwiesner/ai/_Borg.tools_scan/borg_tools_scan.py",
+        "max_complexity_value": 24
+      },
+      "readability": {
+        "score": 8.3,
+        "naming_conventions": "good",
+        "avg_function_length": 37,
+        "documentation_coverage": 0.76
+      },
+      "best_practices": {
+        "error_handling_coverage": 0.65,
+        "logging_present": true,
+        "security_patterns": []
+      },
+      "debt_indicators": {
+        "todo_count": 7,
+        "fixme_count": 0,
+        "hack_count": 0,
+        "deprecated_apis": [
+          "md5 (deprecated crypto)",
+          "requests.get(verify=False)",
+          "flask.ext"
+        ],
+        "code_duplication_estimate": "low"
+      },
+      "fundamental_issues": [
+        {
+          "severity": "HIGH",
+          "category": "security",
+          "description": "Hardcoded API credentials detected",
+          "file": "/Users/wojciechwiesner/ai/_Borg.tools_scan/tests/test_code_analyzer.py",
+          "line": 251,
+          "snippet": "API_KEY = \"sk-1234567890abcdef\""
+        },
+        {
+          "severity": "HIGH",
+          "category": "security",
+          "description": "Hardcoded API credentials detected",
+          "file": "/Users/wojciechwiesner/ai/_Borg.tools_scan/tests/test_code_analyzer.py",
+          "line": 306,
+          "snippet": "API_KEY = \"hardcoded-key-12345\""
+        },
+        {
+          "severity": "HIGH",
+          "category": "security",
+          "description": "Hardcoded API credentials detected",
+          "file": "/Users/wojciechwiesner/ai/_Borg.tools_scan/tests/test_code_analyzer.py",
+          "line": 465,
+          "snippet": "API_KEY = \"sk-hardcoded-key-12345\""
+        },
+        {
+          "severity": "HIGH",
+          "category": "security",
+          "description": "Hardcoded API credentials detected",
+          "file": "/Users/wojciechwiesner/ai/_Borg.tools_scan/tests/test_code_analyzer.py",
+          "line": 252,
+          "snippet": "SECRET = \"my-secret-key-123\""
+        },
+        {
+          "severity": "HIGH",
+          "category": "security",
+          "description": "Hardcoded password detected",
+          "file": "/Users/wojciechwiesner/ai/_Borg.tools_scan/tests/test_code_analyzer.py",
+          "line": 466,
+          "snippet": "password = \"admin123\""
+        },
+        {
+          "severity": "HIGH",
+          "category": "security",
+          "description": "Code injection vulnerability (eval)",
+          "file": "/Users/wojciechwiesner/ai/_Borg.tools_scan/tests/test_code_analyzer.py",
+          "line": 279,
+          "snippet": "eval(user_input)"
+        },
+        {
+          "severity": "HIGH",
+          "category": "security",
+          "description": "Code execution vulnerability (exec)",
+          "file": "/Users/wojciechwiesner/ai/_Borg.tools_scan/tests/test_code_analyzer.py",
+          "line": 280,
+          "snippet": "exec(untrusted_code)"
+        },
+        {
+          "severity": "HIGH",
+          "category": "security",
+          "description": "Potential SQL injection vulnerability",
+          "file": "/Users/wojciechwiesner/ai/_Borg.tools_scan/tests/test_code_analyzer.py",
+          "line": 265,
+          "snippet": "query = \"SELECT * FROM users WHERE id = \" + user_id + \" AND active = 1\""
+        },
+        {
+          "severity": "HIGH",
+          "category": "security",
+          "description": "Potential SQL injection vulnerability",
+          "file": "/Users/wojciechwiesner/ai/_Borg.tools_scan/tests/test_code_analyzer.py",
+          "line": 266,
+          "snippet": "cursor.execute(\"SELECT * FROM users WHERE name = '%s'\" % username)"
+        },
+        {
+          "severity": "HIGH",
+          "category": "security",
+          "description": "Potential SQL injection vulnerability",
+          "file": "/Users/wojciechwiesner/ai/_Borg.tools_scan/modules/code_analyzer.py",
+          "line": 232,
+          "snippet": "(r'SELECT.*\\+.*\\+', 'sql_injection_risk', 'HIGH'),"
+        }
+      ]
+    }
+  },
+  "deployment_analysis": {
+    "deployment": {
+      "readiness_score": 2,
+      "is_deployable": false,
+      "deployment_type": "unknown",
+      "target_platform": "unknown",
+      "detected_artifacts": {
+        "dockerfile": false,
+        "docker_compose": false,
+        "requirements_txt": false,
+        "package_json": false,
+        "env_example": false
+      },
+      "environment_vars": [
+        {
+          "name": "OPENAI_API_KEY",
+          "required": true,
+          "documented": false
+        },
+        {
+          "name": "OPENROUTER_API_KEY",
+          "required": true,
+          "documented": false
+        },
+        {
+          "name": "VAR_NAME",
+          "required": true,
+          "documented": false
+        }
+      ],
+      "ports": [],
+      "services": [],
+      "build_validation": {
+        "has_build_script": false,
+        "build_command": null,
+        "build_success_testable": false
+      },
+      "blockers": [
+        {
+          "severity": "CRITICAL",
+          "category": "dockerfile",
+          "description": "No Dockerfile found",
+          "estimated_fix_time_hours": 2,
+          "suggestion": "Create Dockerfile with appropriate base image and COPY/RUN steps"
+        },
+        {
+          "severity": "HIGH",
+          "category": "environment",
+          "description": "3 undocumented environment variables",
+          "estimated_fix_time_hours": 1,
+          "suggestion": "Create .env.example with: OPENAI_API_KEY, OPENROUTER_API_KEY, VAR_NAME"
+        },
+        {
+          "severity": "MEDIUM",
+          "category": "build",
+          "description": "No build script detected",
+          "estimated_fix_time_hours": 1,
+          "suggestion": "Add Makefile or npm build script for consistent builds"
+        }
+      ],
+      "mvp_checklist": [
+        {
+          "task": "Create Dockerfile with appropriate base image and COPY/RUN steps",
+          "status": "blocked",
+          "time_hours": 2
+        },
+        {
+          "task": "Create ",
+          "status": "missing",
+          "time_hours": 1
+        },
+        {
+          "task": "Add Makefile or npm build script for consistent builds",
+          "status": "pending",
+          "time_hours": 1
+        },
+        {
+          "task": "Test local deployment",
+          "status": "pending",
+          "time_hours": 1
+        },
+        {
+          "task": "Document deployment process",
+          "status": "pending",
+          "time_hours": 0.5
+        }
+      ],
+      "estimated_hours_to_mvp": 5.5,
+      "deployment_instructions": "# Platform: unknown\n\nDeployment instructions not yet implemented for this platform.\nPlease consult platform-specific documentation."
+    }
+  },
+  "documentation_analysis": {
+    "documentation": {
+      "overall_score": 2,
+      "completeness": 0.0,
+      "accuracy": 1.0,
+      "found_docs": {
+        "readme": {
+          "exists": false,
+          "missing_sections": [
+            "Installation",
+            "Usage",
+            "Configuration",
+            "API",
+            "Testing",
+            "Deployment",
+            "Contributing",
+            "License"
+          ]
+        },
+        "api_docs": {
+          "exists": false,
+          "detected_endpoints": 21,
+          "documented_endpoints": 0
+        },
+        "changelog": {
+          "exists": false
+        },
+        "contributing": {
+          "exists": false,
+          "path": null
+        },
+        "license": {
+          "exists": false,
+          "path": null
+        }
+      },
+      "accuracy_issues": [],
+      "auto_generated_sections": {
+        "Installation": "# Quick Start\n\n## Run\n```bash\npython main.py\n```\n",
+        "Usage": "# Usage\n\nSee Quick Start section for basic usage.\n",
+        "API Documentation": "# API Endpoints\n\n\n## /\n\n**GET** - Defined in `web_ui.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /api/chat\n\n**POST** - Defined in `web_ui.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /api/hello\n\n**GET** - Defined in `test_doc_analyzer.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /api/items\n\n**GET** - Defined in `test_real_readme.py`\n\n_Description: (auto-generated, needs manual review)_\n\n**POST** - Defined in `test_real_readme.py`\n\n_Description: (auto-generated, needs manual review)_\n\n**GET** - Defined in `test_doc_analyzer.py`\n\n_Description: (auto-generated, needs manual review)_\n\n**POST** - Defined in `test_doc_analyzer.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /api/projects\n\n**GET** - Defined in `web_ui.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /api/users\n\n**GET** - Defined in `test_real_readme.py`\n\n_Description: (auto-generated, needs manual review)_\n\n**POST** - Defined in `test_real_readme.py`\n\n_Description: (auto-generated, needs manual review)_\n\n**GET** - Defined in `test_doc_analyzer.py`\n\n_Description: (auto-generated, needs manual review)_\n\n**POST** - Defined in `test_doc_analyzer.py`\n\n_Description: (auto-generated, needs manual review)_\n\n**GET** - Defined in `test_doc_analyzer.py`\n\n_Description: (auto-generated, needs manual review)_\n\n**POST** - Defined in `test_doc_analyzer.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /api/users/<id>\n\n**GET** - Defined in `test_doc_analyzer.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /api/users/<int:id>\n\n**GET** - Defined in `test_real_readme.py`\n\n_Description: (auto-generated, needs manual review)_\n\n**PUT** - Defined in `test_real_readme.py`\n\n_Description: (auto-generated, needs manual review)_\n\n**DELETE** - Defined in `test_real_readme.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /health\n\n**GET** - Defined in `test_real_readme.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /path\n\n**GET** - Defined in `modules/doc_analyzer.py`\n\n_Description: (auto-generated, needs manual review)_\n\n**GET** - Defined in `modules/doc_analyzer.py`\n\n_Description: (auto-generated, needs manual review)_\n",
+        "Testing": "# Testing\n\n```bash\n# Run tests\npytest\n# or\npython -m pytest\n```\n",
+        "Deployment": "# Deployment\n\n_(Auto-generated placeholder - needs manual completion)_\n",
+        "Configuration": "# Configuration\n\n_(Auto-generated placeholder - needs manual completion)_\n",
+        "Contributing": "# Contributing\n\nContributions are welcome! Please feel free to submit a Pull Request.\n"
+      }
+    }
+  },
+  "llm_analysis": {
+    "business": {
+      "data": {
+        "problem_solved": "Analysis suggests _Borg.tools_scan addresses developer productivity and automation needs",
+        "target_audience": "Software developers and engineering teams",
+        "monetization_strategy": "Not ready for monetization",
+        "market_viability": 4,
+        "portfolio_suitable": false,
+        "portfolio_pitch": ""
+      }
+    },
+    "aggregator": {
+      "data": {
+        "overall_assessment": "_Borg.tools_scan is in early stages and requires significant work",
+        "top_priorities": [
+          "Complete deployment configuration",
+          "Enhance documentation completeness"
+        ],
+        "vibecodibility_score": 3,
+        "borg_tools_fit": 6
+      }
+    },
+    "architect": {
+      "data": {
+        "design_patterns": [
+          "MVC",
+          "Factory"
+        ],
+        "scalability_notes": "Scalability needs assessment",
+        "architecture_assessment": "Code follows Feature-based pattern",
+        "technical_debt_priority": "medium"
+      }
+    },
+    "deployment": {
+      "data": {
+        "mvp_roadmap": [
+          "Setup CI/CD",
+          "Add monitoring",
+          "Complete documentation"
+        ],
+        "deployment_strategy": "unknown",
+        "infrastructure_recommendations": "Target platform: unknown"
+      }
+    }
+  }
+}

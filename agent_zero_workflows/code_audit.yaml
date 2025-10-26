@@ -1,0 +1,177 @@
+# Agent Zero Code Audit Workflow
+# Comprehensive linting and code quality analysis
+
+task:
+  name: code_audit
+  type: code_quality
+  description: "Run linters and code quality tools across project"
+  timeout: 90  # seconds
+
+  tools:
+    - pylint
+    - eslint
+    - flake8
+    - black
+    - mypy
+    - ruff
+
+  steps:
+    - name: Detect Project Languages
+      command: |
+        echo "Detecting project languages..."
+        if [ -f "package.json" ]; then
+          echo "LANG_JS=1" >> $AGENT_ZERO_ENV
+        fi
+        if [ -f "requirements.txt" ] || [ -f "pyproject.toml" ]; then
+          echo "LANG_PYTHON=1" >> $AGENT_ZERO_ENV
+        fi
+
+    - name: Install Python Linters
+      condition: "$LANG_PYTHON == 1"
+      command: |
+        echo "Installing Python linters..."
+        pip install -q pylint flake8 black mypy ruff || true
+
+    - name: Install JavaScript Linters
+      condition: "$LANG_JS == 1"
+      command: |
+        echo "Installing JavaScript linters..."
+        npm install -g eslint || true
+
+    - name: Run Python Linting
+      condition: "$LANG_PYTHON == 1"
+      command: |
+        echo "Running Pylint..."
+        pylint --output-format=json --disable=all --enable=E,W,R,C **/*.py 2>/dev/null > /tmp/pylint_results.json || true
+
+        echo "Running Flake8..."
+        flake8 --format=json **/*.py 2>/dev/null > /tmp/flake8_results.json || true
+
+        echo "Running Black check..."
+        black --check --quiet . 2>&1 | tee /tmp/black_results.txt || true
+
+        echo "Running Mypy..."
+        mypy --ignore-missing-imports --json-report /tmp/mypy_results . 2>/dev/null || true
+
+        echo "Running Ruff..."
+        ruff check --output-format=json . > /tmp/ruff_results.json 2>/dev/null || true
+
+    - name: Run JavaScript Linting
+      condition: "$LANG_JS == 1"
+      command: |
+        echo "Running ESLint..."
+        if [ -f ".eslintrc" ] || [ -f ".eslintrc.js" ] || [ -f ".eslintrc.json" ]; then
+          eslint --format json . > /tmp/eslint_results.json 2>/dev/null || true
+        else
+          echo "No ESLint config found, skipping..."
+          echo "[]" > /tmp/eslint_results.json
+        fi
+
+    - name: Calculate Code Quality Metrics
+      command: |
+        echo "Calculating metrics..."
+        python3 << 'EOF'
+import json
+import os
+from pathlib import Path
+
+results = {
+    "pylint_score": 0.0,
+    "pylint_errors": 0,
+    "pylint_warnings": 0,
+    "flake8_issues": 0,
+    "black_unformatted_files": 0,
+    "mypy_errors": 0,
+    "ruff_issues": 0,
+    "eslint_errors": 0,
+    "eslint_warnings": 0,
+    "overall_score": 0.0
+}
+
+# Parse Pylint results
+try:
+    with open('/tmp/pylint_results.json', 'r') as f:
+        pylint_data = json.load(f)
+        if isinstance(pylint_data, list):
+            for item in pylint_data:
+                if item.get('type') == 'error':
+                    results['pylint_errors'] += 1
+                elif item.get('type') == 'warning':
+                    results['pylint_warnings'] += 1
+except:
+    pass
+
+# Parse Flake8 results
+try:
+    with open('/tmp/flake8_results.json', 'r') as f:
+        flake8_data = json.load(f)
+        results['flake8_issues'] = len(flake8_data) if isinstance(flake8_data, list) else 0
+except:
+    pass
+
+# Parse Black results
+try:
+    with open('/tmp/black_results.txt', 'r') as f:
+        black_output = f.read()
+        results['black_unformatted_files'] = black_output.count('would reformat')
+except:
+    pass
+
+# Parse Ruff results
+try:
+    with open('/tmp/ruff_results.json', 'r') as f:
+        ruff_data = json.load(f)
+        results['ruff_issues'] = len(ruff_data) if isinstance(ruff_data, list) else 0
+except:
+    pass
+
+# Parse ESLint results
+try:
+    with open('/tmp/eslint_results.json', 'r') as f:
+        eslint_data = json.load(f)
+        if isinstance(eslint_data, list):
+            for file_result in eslint_data:
+                messages = file_result.get('messages', [])
+                for msg in messages:
+                    if msg.get('severity') == 2:
+                        results['eslint_errors'] += 1
+                    elif msg.get('severity') == 1:
+                        results['eslint_warnings'] += 1
+except:
+    pass
+
+# Calculate overall score (0-10)
+total_issues = (
+    results['pylint_errors'] * 2 +
+    results['pylint_warnings'] +
+    results['flake8_issues'] +
+    results['black_unformatted_files'] +
+    results['ruff_issues'] +
+    results['eslint_errors'] * 2 +
+    results['eslint_warnings']
+)
+
+# Base score is 10, subtract for issues (capped at 0)
+results['overall_score'] = max(0.0, 10.0 - (total_issues / 10.0))
+results['pylint_score'] = max(0.0, 10.0 - (results['pylint_errors'] * 0.5 + results['pylint_warnings'] * 0.2))
+
+# Save results
+with open('/tmp/code_audit_results.json', 'w') as f:
+    json.dump(results, f, indent=2)
+
+print(json.dumps(results, indent=2))
+EOF
+
+    - name: Aggregate Results
+      command: |
+        echo "Aggregating final results..."
+        cat /tmp/code_audit_results.json
+
+  output:
+    format: json
+    file: /tmp/code_audit_results.json
+
+  result_mapping:
+    code_quality_score: "overall_score"
+    issues_count: "pylint_errors + flake8_issues + eslint_errors"
+    warnings_count: "pylint_warnings + eslint_warnings"

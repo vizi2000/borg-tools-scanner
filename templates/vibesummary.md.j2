@@ -1,0 +1,267 @@
+# VibeSummary: {{ project_name }}
+
+**Generated:** {{ generation_timestamp }}
+**Project Path:** `{{ project_path }}`
+**Languages:** {{ languages | join(', ') }}
+
+---
+
+## Project Essence
+
+**What it does:** {{ project_description }}
+
+**Target Audience:** {{ target_audience }}
+
+**Problem Solved:** {{ problem_solved }}
+
+**Current Stage:** {{ project_stage }}
+
+---
+
+## Vibecodibility Scores
+
+| Category | Score | Status | Notes |
+|----------|-------|--------|-------|
+| 🎨 **Code Quality** | {{ code_quality_score }}/10 | {{ code_quality_status }} | {{ code_quality_notes }} |
+| 🚀 **Deployment Readiness** | {{ deployment_readiness_score }}/10 | {{ deployment_readiness_status }} | {{ deployment_readiness_notes }} |
+| 📚 **Documentation** | {{ documentation_score }}/10 | {{ documentation_status }} | {{ documentation_notes }} |
+| 🎯 **Borg.tools Fit** | {{ borg_tools_fit_score }}/10 | {{ borg_tools_fit_status }} | {{ borg_tools_fit_notes }} |
+| 🎪 **MVP Proximity** | {{ mvp_proximity_score }}/10 | {{ mvp_proximity_status }} | {{ mvp_proximity_notes }} |
+| 💰 **Monetization Viability** | {{ monetization_viability_score }}/10 | {{ monetization_viability_status }} | {{ monetization_viability_notes }} |
+
+**Overall Vibecodibility:** {{ overall_vibecodibility }}/10 {{ overall_emoji }}
+
+---
+
+## Architecture & Design
+
+**Pattern:** {{ architecture_pattern }}
+**Modularity:** {{ modularity_score }}/10
+**Design Patterns:** {{ design_patterns | join(', ') if design_patterns else 'None detected' }}
+
+### Complexity Metrics
+- **Avg Cyclomatic Complexity:** {{ avg_cyclomatic }}
+- **Avg Cognitive Complexity:** {{ avg_cognitive }}
+- **Max Complexity:** {{ max_complexity }} {% if max_complexity_file %}in `{{ max_complexity_file }}`{% endif %}
+
+### Code Health
+- **Readability Score:** {{ readability_score }}/10
+- **Documentation Coverage:** {{ documentation_coverage | round(2) }}%
+- **Avg Function Length:** {{ avg_function_length }} lines
+{% if security_issues_count > 0 %}
+- ⚠️ **Security Issues:** {{ security_issues_count }} ({{ high_severity_count }} HIGH severity)
+{% endif %}
+
+### Technical Debt
+- **TODO markers:** {{ todo_count }}
+- **FIXME markers:** {{ fixme_count }}
+- **Deprecated APIs:** {{ deprecated_apis_count }}
+{% if fundamental_issues %}
+- **Fundamental Issues:** {{ fundamental_issues | length }}
+{% endif %}
+
+---
+
+## Deployment Status
+
+**Deployment Type:** {{ deployment_type }}
+**Target Platform:** {{ target_platform }}
+**Is Deployable:** {{ 'YES ✅' if is_deployable else 'NO ❌' }}
+**Readiness Score:** {{ deployment_readiness_score }}/10
+
+### Deployment Artifacts
+{% if detected_artifacts %}
+{% for artifact, exists in detected_artifacts.items() %}
+- {{ '✅' if exists else '❌' }} {{ artifact }}
+{% endfor %}
+{% endif %}
+
+### Environment Configuration
+{% if environment_vars %}
+**Required Environment Variables:** {{ environment_vars | length }}
+{% for var in environment_vars %}
+- `{{ var.name }}` - {{ '✅ Documented' if var.documented else '❌ Undocumented' }}
+{% endfor %}
+{% else %}
+No environment variables detected.
+{% endif %}
+
+{% if exposed_ports %}
+**Exposed Ports:** {{ exposed_ports | join(', ') }}
+{% endif %}
+
+{% if deployment_blockers %}
+### Deployment Blockers ({{ deployment_blockers | length }})
+{% for blocker in deployment_blockers %}
+**{{ blocker.severity }}** - {{ blocker.category }}
+{{ blocker.description }}
+💡 **Fix:** {{ blocker.suggestion }} (Est: {{ blocker.estimated_fix_time_hours }}h)
+{% endfor %}
+{% endif %}
+
+---
+
+## MVP Checklist
+
+**Estimated Time to MVP:** {{ estimated_hours_to_mvp }}h
+
+{% for item in mvp_checklist %}
+- [{{ 'x' if item.status == 'done' else ' ' }}] {{ item.task }} {% if item.status == 'blocked' %}🔴{% elif item.status == 'missing' %}🟡{% endif %} ({{ item.time_hours }}h)
+{% endfor %}
+
+---
+
+## Documentation Quality
+
+**Overall Score:** {{ documentation_score }}/10
+**Completeness:** {{ documentation_completeness | round(2) }}%
+**Accuracy:** {{ documentation_accuracy | round(2) }}%
+
+### Found Documentation
+- **README:** {{ '✅' if readme_exists else '❌' }}{% if readme_exists %} ({{ readme_word_count }} words, {{ readme_sections | length }} sections){% endif %}
+- **API Docs:** {{ '✅' if api_docs_exist else '❌' }}{% if detected_endpoints > 0 %} ({{ documented_endpoints }}/{{ detected_endpoints }} endpoints documented){% endif %}
+- **CHANGELOG:** {{ '✅' if changelog_exists else '❌' }}
+- **CONTRIBUTING:** {{ '✅' if contributing_exists else '❌' }}
+- **LICENSE:** {{ '✅' if license_exists else '❌' }}
+
+{% if missing_sections %}
+### Missing README Sections
+{% for section in missing_sections %}
+- {{ section }}
+{% endfor %}
+{% endif %}
+
+{% if accuracy_issues %}
+### Documentation Accuracy Issues ({{ accuracy_issues | length }})
+{% for issue in accuracy_issues %}
+- **{{ issue.severity }}** - {{ issue.type }}: {{ issue.description }}
+{% endfor %}
+{% endif %}
+
+---
+
+## Monetization Analysis
+
+**Market Viability:** {{ market_viability }}/10
+**Monetization Strategy:** {{ monetization_strategy }}
+
+### Revenue Potential
+{{ monetization_potential_description }}
+
+### Target Market
+{{ target_market_description }}
+
+### Competitive Advantage
+{{ competitive_advantage }}
+
+---
+
+## Portfolio Suitability
+
+**Suitable for Portfolio:** {{ 'YES ✅' if portfolio_suitable else 'NO ❌' }}
+
+{% if portfolio_suitable %}
+### Portfolio Pitch
+{{ portfolio_pitch }}
+
+### Key Highlights
+{% for highlight in portfolio_highlights %}
+- {{ highlight }}
+{% endfor %}
+{% else %}
+### Why Not Portfolio-Ready
+{{ portfolio_blockers }}
+{% endif %}
+
+---
+
+## Actionable Next Steps
+
+### Priority 1: Critical ({{ critical_tasks | length }} tasks, ~{{ critical_hours }}h)
+{% for task in critical_tasks %}
+{{ loop.index }}. **{{ task.title }}** ({{ task.time_estimate }}h)
+   - {{ task.description }}
+   - Impact: {{ task.impact }}
+   - Effort: {{ task.effort }}
+{% endfor %}
+
+### Priority 2: High Impact ({{ high_impact_tasks | length }} tasks, ~{{ high_impact_hours }}h)
+{% for task in high_impact_tasks %}
+{{ loop.index }}. **{{ task.title }}** ({{ task.time_estimate }}h)
+   - {{ task.description }}
+   - Impact: {{ task.impact }}
+{% endfor %}
+
+### Priority 3: Quick Wins ({{ quick_wins | length }} tasks, ~{{ quick_wins_hours }}h)
+{% for task in quick_wins %}
+{{ loop.index }}. **{{ task.title }}** ({{ task.time_estimate }}h)
+   - {{ task.description }}
+{% endfor %}
+
+---
+
+## AI Acceleration Opportunities
+
+{% for opportunity in ai_opportunities %}
+### {{ opportunity.category }}
+{{ opportunity.description }}
+
+**Suggested Prompts:**
+```
+{{ opportunity.prompt }}
+```
+
+**Expected Output:** {{ opportunity.expected_output }}
+**Time Saved:** {{ opportunity.time_saved }}
+{% endfor %}
+
+---
+
+## Borg.tools Integration
+
+**Fit Score:** {{ borg_tools_fit_score }}/10
+
+### Integration Opportunities
+{% for integration in borg_integration_opportunities %}
+- **{{ integration.service }}**: {{ integration.description }} ({{ integration.effort }})
+{% endfor %}
+
+### Deployment Instructions
+```bash
+{{ deployment_instructions }}
+```
+
+---
+
+## Raw Analysis Data
+
+<details>
+<summary>Click to expand full analysis results</summary>
+
+### Code Quality Metrics
+```json
+{{ code_quality_raw | tojson(indent=2) }}
+```
+
+### Deployment Analysis
+```json
+{{ deployment_analysis_raw | tojson(indent=2) }}
+```
+
+### Documentation Analysis
+```json
+{{ documentation_analysis_raw | tojson(indent=2) }}
+```
+
+### LLM Analysis
+```json
+{{ llm_analysis_raw | tojson(indent=2) }}
+```
+
+</details>
+
+---
+
+**Generated by:** Borg.tools Scanner v2.0
+**Created by:** The Collective Borg.tools
+**Signature:** This VibeSummary represents the collective intelligence analysis of your codebase.

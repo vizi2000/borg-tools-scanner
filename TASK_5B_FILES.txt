@@ -1,0 +1,106 @@
+═══════════════════════════════════════════════════════════════════
+TASK 5B: WEB UI ENHANCEMENTS - FILE REFERENCE
+═══════════════════════════════════════════════════════════════════
+
+MODIFIED FILES (2)
+──────────────────────────────────────────────────────────────────
+
+1. Backend (Flask Application)
+   /Users/wojciechwiesner/ai/_Borg.tools_scan/web_ui.py
+   - Enhanced with v2.0 features
+   - New API endpoints
+   - Score calculations
+
+2. Frontend (HTML Template)
+   /Users/wojciechwiesner/ai/_Borg.tools_scan/templates/index.html
+   - Complete rewrite
+   - Bootstrap 5
+   - Chart.js integration
+
+
+CREATED FILES (7)
+──────────────────────────────────────────────────────────────────
+
+1. Test Suite
+   /Users/wojciechwiesner/ai/_Borg.tools_scan/test_web_ui_standalone.py
+   - Comprehensive tests
+   - 100% passing
+
+2. Sample Data
+   /Users/wojciechwiesner/ai/_Borg.tools_scan/borg_dashboard_sample.json
+   - 5 representative projects
+   - Ready for testing
+
+3. Technical Documentation
+   /Users/wojciechwiesner/ai/_Borg.tools_scan/WEB_UI_v2_ENHANCEMENTS.md
+   - Complete implementation details
+   - API documentation
+   - Troubleshooting guide
+
+4. User Guide
+   /Users/wojciechwiesner/ai/_Borg.tools_scan/WEB_UI_QUICK_START.md
+   - Installation steps
+   - Feature overview
+   - Quick reference
+
+5. Executive Summary
+   /Users/wojciechwiesner/ai/_Borg.tools_scan/TASK_5B_SUMMARY.md
+   - High-level overview
+   - Test results
+   - Metrics
+
+6. File Reference (This File)
+   /Users/wojciechwiesner/ai/_Borg.tools_scan/TASK_5B_FILES.txt
+   - All file paths
+   - Quick navigation
+
+7. Project Data
+   /Users/wojciechwiesner/ai/_Borg.tools_scan/borg_dashboard.json
+   - Updated with sample data
+   - Ready to use
+
+
+DEPRECATED FILES (1)
+──────────────────────────────────────────────────────────────────
+
+1. Initial Test (Replaced)
+   /Users/wojciechwiesner/ai/_Borg.tools_scan/test_web_ui.py
+   - Use test_web_ui_standalone.py instead
+
+
+QUICK COMMANDS
+──────────────────────────────────────────────────────────────────
+
+# Run tests
+python3 /Users/wojciechwiesner/ai/_Borg.tools_scan/test_web_ui_standalone.py
+
+# Start web UI
+python3 /Users/wojciechwiesner/ai/_Borg.tools_scan/web_ui.py
+
+# View documentation
+cat /Users/wojciechwiesner/ai/_Borg.tools_scan/WEB_UI_QUICK_START.md
+
+# Prepare sample data
+cp /Users/wojciechwiesner/ai/_Borg.tools_scan/borg_dashboard_sample.json \
+   /Users/wojciechwiesner/ai/_Borg.tools_scan/borg_dashboard.json
+
+
+DIRECTORY STRUCTURE
+──────────────────────────────────────────────────────────────────
+
+/Users/wojciechwiesner/ai/_Borg.tools_scan/
+├── web_ui.py                      (Modified - Backend)
+├── templates/
+│   └── index.html                 (Modified - Frontend)
+├── test_web_ui_standalone.py      (New - Test Suite)
+├── borg_dashboard_sample.json     (New - Sample Data)
+├── borg_dashboard.json            (Updated - Active Data)
+├── WEB_UI_v2_ENHANCEMENTS.md      (New - Tech Docs)
+├── WEB_UI_QUICK_START.md          (New - User Guide)
+├── TASK_5B_SUMMARY.md             (New - Summary)
+└── TASK_5B_FILES.txt              (New - This File)
+
+
+═══════════════════════════════════════════════════════════════════
+Status: ✅ COMPLETE | Date: 2025-10-25 | Version: v2.0.0
+═══════════════════════════════════════════════════════════════════

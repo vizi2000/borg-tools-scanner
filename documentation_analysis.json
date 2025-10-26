@@ -1,0 +1,71 @@
+{
+  "documentation": {
+    "overall_score": 2,
+    "completeness": 0.0,
+    "accuracy": 1.0,
+    "found_docs": {
+      "readme": {
+        "exists": false,
+        "missing_sections": [
+          "Installation",
+          "Usage",
+          "Configuration",
+          "API",
+          "Testing",
+          "Deployment",
+          "Contributing",
+          "License"
+        ]
+      },
+      "api_docs": {
+        "exists": false,
+        "detected_endpoints": 21,
+        "documented_endpoints": 0
+      },
+      "changelog": {
+        "exists": false
+      },
+      "contributing": {
+        "exists": false,
+        "path": null
+      },
+      "license": {
+        "exists": false,
+        "path": null
+      }
+    },
+    "accuracy_issues": [],
+    "auto_generated_sections": {
+      "Installation": "# Quick Start\n\n## Run\n```bash\npython main.py\n```\n",
+      "Usage": "# Usage\n\nSee Quick Start section for basic usage.\n",
+      "API Documentation": "# API Endpoints\n\n\n## /\n\n**GET** - Defined in `web_ui.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /api/chat\n\n**POST** - Defined in `web_ui.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /api/hello\n\n**GET** - Defined in `test_doc_analyzer.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /api/items\n\n**GET** - Defined in `test_real_readme.py`\n\n_Description: (auto-generated, needs manual review)_\n\n**POST** - Defined in `test_real_readme.py`\n\n_Description: (auto-generated, needs manual review)_\n\n**GET** - Defined in `test_doc_analyzer.py`\n\n_Description: (auto-generated, needs manual review)_\n\n**POST** - Defined in `test_doc_analyzer.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /api/projects\n\n**GET** - Defined in `web_ui.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /api/users\n\n**GET** - Defined in `test_real_readme.py`\n\n_Description: (auto-generated, needs manual review)_\n\n**POST** - Defined in `test_real_readme.py`\n\n_Description: (auto-generated, needs manual review)_\n\n**GET** - Defined in `test_doc_analyzer.py`\n\n_Description: (auto-generated, needs manual review)_\n\n**POST** - Defined in `test_doc_analyzer.py`\n\n_Description: (auto-generated, needs manual review)_\n\n**GET** - Defined in `test_doc_analyzer.py`\n\n_Description: (auto-generated, needs manual review)_\n\n**POST** - Defined in `test_doc_analyzer.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /api/users/<id>\n\n**GET** - Defined in `test_doc_analyzer.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /api/users/<int:id>\n\n**GET** - Defined in `test_real_readme.py`\n\n_Description: (auto-generated, needs manual review)_\n\n**PUT** - Defined in `test_real_readme.py`\n\n_Description: (auto-generated, needs manual review)_\n\n**DELETE** - Defined in `test_real_readme.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /health\n\n**GET** - Defined in `test_real_readme.py`\n\n_Description: (auto-generated, needs manual review)_\n\n\n## /path\n\n**GET** - Defined in `modules/doc_analyzer.py`\n\n_Description: (auto-generated, needs manual review)_\n\n**GET** - Defined in `modules/doc_analyzer.py`\n\n_Description: (auto-generated, needs manual review)_\n",
+      "Testing": "# Testing\n\n```bash\n# Run tests\npytest\n# or\npython -m pytest\n```\n",
+      "Deployment": "# Deployment\n\n_(Auto-generated placeholder - needs manual completion)_\n",
+      "Configuration": "# Configuration\n\n_(Auto-generated placeholder - needs manual completion)_\n",
+      "Contributing": "# Contributing\n\nContributions are welcome! Please feel free to submit a Pull Request.\n"
+    }
+  },
+  "recommendations": [
+    {
+      "priority": "HIGH",
+      "category": "documentation",
+      "action": "Create comprehensive README with all standard sections",
+      "impact": "Critical for project adoption and maintenance"
+    },
+    {
+      "priority": "MEDIUM",
+      "category": "documentation",
+      "action": "Add missing README sections: Installation, Usage, Configuration...",
+      "impact": "Improved documentation completeness",
+      "auto_generated": true
+    },
+    {
+      "priority": "HIGH",
+      "category": "api_documentation",
+      "action": "Document 21 undocumented API endpoints",
+      "impact": "Essential for API usability",
+      "auto_generated": true
+    }
+  ],
+  "summary": "\u274c Poor (2/10)\n   Completeness: 0%\n   Accuracy: 100%\n"
+}

@@ -1,0 +1,266 @@
+# Agent Zero Security Scan Workflow
+# Security vulnerability analysis and dependency audit
+
+task:
+  name: security_scan
+  type: security
+  description: "Scan for security vulnerabilities and unsafe patterns"
+  timeout: 90  # seconds
+
+  tools:
+    - bandit
+    - safety
+    - semgrep
+    - npm-audit
+    - trivy
+
+  steps:
+    - name: Detect Project Type
+      command: |
+        echo "Detecting project type..."
+        if [ -f "package.json" ]; then
+          echo "LANG_JS=1" >> $AGENT_ZERO_ENV
+        fi
+        if [ -f "requirements.txt" ] || [ -f "pyproject.toml" ]; then
+          echo "LANG_PYTHON=1" >> $AGENT_ZERO_ENV
+        fi
+
+    - name: Install Python Security Tools
+      condition: "$LANG_PYTHON == 1"
+      command: |
+        echo "Installing Python security tools..."
+        pip install -q bandit safety || true
+
+    - name: Install Semgrep
+      command: |
+        echo "Installing Semgrep..."
+        pip install -q semgrep || true
+
+    - name: Run Bandit Security Scan
+      condition: "$LANG_PYTHON == 1"
+      command: |
+        echo "Running Bandit..."
+        bandit -r . -f json -o /tmp/bandit_results.json 2>/dev/null || true
+        if [ ! -f /tmp/bandit_results.json ]; then
+          echo '{"results": [], "metrics": {"_totals": {"SEVERITY.HIGH": 0, "SEVERITY.MEDIUM": 0, "SEVERITY.LOW": 0}}}' > /tmp/bandit_results.json
+        fi
+
+    - name: Run Safety Dependency Check
+      condition: "$LANG_PYTHON == 1"
+      command: |
+        echo "Running Safety..."
+        safety check --json --output /tmp/safety_results.json 2>/dev/null || echo '[]' > /tmp/safety_results.json
+
+    - name: Run Semgrep Security Rules
+      command: |
+        echo "Running Semgrep..."
+        semgrep --config=auto --json --output=/tmp/semgrep_results.json . 2>/dev/null || echo '{"results": []}' > /tmp/semgrep_results.json
+
+    - name: Run NPM Audit
+      condition: "$LANG_JS == 1"
+      command: |
+        echo "Running NPM audit..."
+        if [ -f "package-lock.json" ]; then
+          npm audit --json > /tmp/npm_audit_results.json 2>/dev/null || echo '{"vulnerabilities": {}}' > /tmp/npm_audit_results.json
+        else
+          echo '{"vulnerabilities": {}}' > /tmp/npm_audit_results.json
+        fi
+
+    - name: Check for Hardcoded Secrets
+      command: |
+        echo "Scanning for hardcoded secrets..."
+        python3 << 'EOF'
+import re
+import os
+from pathlib import Path
+
+secrets_patterns = [
+    (r'(?i)(api[_-]?key|apikey)\s*[=:]\s*["\']([^"\']{10,})["\']', 'API Key'),
+    (r'(?i)(secret[_-]?key|secretkey)\s*[=:]\s*["\']([^"\']{10,})["\']', 'Secret Key'),
+    (r'(?i)(password|passwd|pwd)\s*[=:]\s*["\']([^"\']{5,})["\']', 'Password'),
+    (r'(?i)(aws[_-]?access[_-]?key[_-]?id)\s*[=:]\s*["\']([^"\']{10,})["\']', 'AWS Access Key'),
+    (r'(?i)(private[_-]?key)\s*[=:]\s*["\']([^"\']{20,})["\']', 'Private Key'),
+    (r'(?i)(token)\s*[=:]\s*["\']([^"\']{10,})["\']', 'Token'),
+]
+
+findings = []
+exclude_patterns = ['.git/', 'node_modules/', '.venv/', '__pycache__/', 'dist/', 'build/']
+
+for root, dirs, files in os.walk('.'):
+    # Filter out excluded directories
+    dirs[:] = [d for d in dirs if not any(excl in os.path.join(root, d) for excl in exclude_patterns)]
+
+    for file in files:
+        if file.endswith(('.py', '.js', '.ts', '.jsx', '.tsx', '.json', '.yaml', '.yml', '.env', '.config')):
+            file_path = os.path.join(root, file)
+            try:
+                with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+                    content = f.read()
+                    for pattern, secret_type in secrets_patterns:
+                        matches = re.finditer(pattern, content)
+                        for match in matches:
+                            findings.append({
+                                'file': file_path,
+                                'type': secret_type,
+                                'line': content[:match.start()].count('\n') + 1
+                            })
+            except:
+                pass
+
+import json
+with open('/tmp/secrets_scan.json', 'w') as f:
+    json.dump({'findings': findings, 'count': len(findings)}, f, indent=2)
+
+print(f"Found {len(findings)} potential secret exposures")
+EOF
+
+    - name: Aggregate Security Results
+      command: |
+        echo "Aggregating security results..."
+        python3 << 'EOF'
+import json
+import os
+
+results = {
+    "security_score": 10.0,
+    "high_severity": 0,
+    "medium_severity": 0,
+    "low_severity": 0,
+    "secrets_found": 0,
+    "vulnerable_dependencies": 0,
+    "security_issues": []
+}
+
+# Parse Bandit results
+try:
+    with open('/tmp/bandit_results.json', 'r') as f:
+        bandit_data = json.load(f)
+        metrics = bandit_data.get('metrics', {}).get('_totals', {})
+        results['high_severity'] += metrics.get('SEVERITY.HIGH', 0)
+        results['medium_severity'] += metrics.get('SEVERITY.MEDIUM', 0)
+        results['low_severity'] += metrics.get('SEVERITY.LOW', 0)
+
+        for issue in bandit_data.get('results', []):
+            results['security_issues'].append({
+                'severity': issue.get('issue_severity', 'UNKNOWN'),
+                'file': issue.get('filename', ''),
+                'line': issue.get('line_number', 0),
+                'issue': issue.get('issue_text', ''),
+                'source': 'bandit'
+            })
+except:
+    pass
+
+# Parse Safety results
+try:
+    with open('/tmp/safety_results.json', 'r') as f:
+        safety_data = json.load(f)
+        if isinstance(safety_data, list):
+            results['vulnerable_dependencies'] += len(safety_data)
+            for vuln in safety_data:
+                results['security_issues'].append({
+                    'severity': 'HIGH',
+                    'package': vuln.get('package', 'unknown'),
+                    'installed_version': vuln.get('installed_version', ''),
+                    'vulnerability': vuln.get('vulnerability', ''),
+                    'source': 'safety'
+                })
+except:
+    pass
+
+# Parse Semgrep results
+try:
+    with open('/tmp/semgrep_results.json', 'r') as f:
+        semgrep_data = json.load(f)
+        for finding in semgrep_data.get('results', []):
+            severity = finding.get('extra', {}).get('severity', 'INFO').upper()
+            if severity == 'ERROR':
+                results['high_severity'] += 1
+            elif severity == 'WARNING':
+                results['medium_severity'] += 1
+            else:
+                results['low_severity'] += 1
+
+            results['security_issues'].append({
+                'severity': severity,
+                'file': finding.get('path', ''),
+                'line': finding.get('start', {}).get('line', 0),
+                'issue': finding.get('check_id', ''),
+                'message': finding.get('extra', {}).get('message', ''),
+                'source': 'semgrep'
+            })
+except:
+    pass
+
+# Parse NPM audit results
+try:
+    with open('/tmp/npm_audit_results.json', 'r') as f:
+        npm_data = json.load(f)
+        vulnerabilities = npm_data.get('vulnerabilities', {})
+        for pkg, vuln_data in vulnerabilities.items():
+            severity = vuln_data.get('severity', 'low').lower()
+            if severity == 'high' or severity == 'critical':
+                results['high_severity'] += 1
+            elif severity == 'moderate':
+                results['medium_severity'] += 1
+            else:
+                results['low_severity'] += 1
+
+            results['vulnerable_dependencies'] += 1
+            results['security_issues'].append({
+                'severity': severity.upper(),
+                'package': pkg,
+                'issue': vuln_data.get('via', [{}])[0] if isinstance(vuln_data.get('via'), list) else str(vuln_data.get('via', '')),
+                'source': 'npm-audit'
+            })
+except:
+    pass
+
+# Parse secrets scan
+try:
+    with open('/tmp/secrets_scan.json', 'r') as f:
+        secrets_data = json.load(f)
+        results['secrets_found'] = secrets_data.get('count', 0)
+        for finding in secrets_data.get('findings', []):
+            results['high_severity'] += 1
+            results['security_issues'].append({
+                'severity': 'CRITICAL',
+                'file': finding.get('file', ''),
+                'line': finding.get('line', 0),
+                'issue': f"Potential {finding.get('type', 'secret')} exposure",
+                'source': 'secrets-scan'
+            })
+except:
+    pass
+
+# Calculate security score (0-10)
+# High severity issues are weighted heavily
+penalty = (
+    results['high_severity'] * 2.0 +
+    results['medium_severity'] * 0.5 +
+    results['low_severity'] * 0.1 +
+    results['secrets_found'] * 3.0
+)
+
+results['security_score'] = max(0.0, 10.0 - penalty)
+
+# Save results
+with open('/tmp/security_scan_results.json', 'w') as f:
+    json.dump(results, f, indent=2)
+
+print(json.dumps(results, indent=2))
+EOF
+
+    - name: Generate Security Report Summary
+      command: |
+        cat /tmp/security_scan_results.json
+
+  output:
+    format: json
+    file: /tmp/security_scan_results.json
+
+  result_mapping:
+    security_score: "security_score"
+    critical_issues: "high_severity"
+    vulnerable_deps: "vulnerable_dependencies"
+    secrets_exposed: "secrets_found"
