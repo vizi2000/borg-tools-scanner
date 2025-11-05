@@ -151,6 +151,9 @@ async def run_deep_analysis(
     SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
     db = SessionLocal()
 
+    # Initialize task variable (may be None if error occurs before loading)
+    task = None
+
     try:
         # Load task and project
         task = db.query(AnalysisTask).filter(AnalysisTask.id == task_id).first()
@@ -394,10 +397,12 @@ async def run_deep_analysis(
         # Handle catastrophic failure
         print(f"❌ Deep analysis failed: {e}")
 
-        task.status = "failed"
-        task.error = str(e)
-        task.completed_at = datetime.utcnow()
-        db.commit()
+        # Only update task if it was successfully loaded
+        if task is not None:
+            task.status = "failed"
+            task.error = str(e)
+            task.completed_at = datetime.utcnow()
+            db.commit()
 
         await manager.send_update(task_id, {
             "type": "error",
@@ -483,7 +488,10 @@ async def create_deep_analysis(
     print(f"📋 Queued deep analysis for {project.name} (task_id: {task_id[:8]})")
 
     # Get database path for background task
-    db_path = Path(__file__).parent.parent / "borg.db"
+    # Use test database path if in test environment
+    db_path = getattr(db.bind.engine.url, 'database', None)
+    if db_path is None:
+        db_path = str(Path(__file__).parent.parent / "borg.db")
 
     # Queue background task
     background_tasks.add_task(

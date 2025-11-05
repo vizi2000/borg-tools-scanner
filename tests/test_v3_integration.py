@@ -235,8 +235,15 @@ def test_portfolio_stats(sample_project):
     stats = response.json()
     assert stats["total_projects"] >= 1
     assert "by_stage" in stats
-    assert "by_language" in stats
-    assert "avg_value_score" in stats
+    assert "avg_code_quality" in stats
+    assert "projects_with_tests" in stats
+    assert "projects_with_ci" in stats
+    # Verify counts match our sample project
+    assert stats["total_projects"] == 1
+    assert stats["by_stage"]["mvp"] == 1
+    assert stats["projects_with_tests"] == 1
+    assert stats["projects_with_ci"] == 1
+    assert stats["avg_code_quality"] == 7.5
 
 
 # ============================================================================
