@@ -1,0 +1,59 @@
+{
+  "summary": {
+    "total_projects": 10,
+    "deep_scanned": 4,
+    "duplicates_found": 0,
+    "unique_projects": 10,
+    "total_time_seconds": 71.21,
+    "avg_time_per_project": 7.12
+  },
+  "stage_distribution": {
+    "idea": 5,
+    "beta": 5
+  },
+  "language_distribution": {
+    "python": 5,
+    "bash": 2
+  },
+  "model_usage": {
+    "total_calls": 4,
+    "successful_calls": 4,
+    "failed_calls": 0,
+    "success_rate": "100.0%",
+    "models_used": {
+      "openrouter/auto": 4
+    },
+    "unique_models": 1
+  },
+  "duplicate_groups": [],
+  "top_projects": [
+    {
+      "name": "Finco_scraper",
+      "stage": "beta",
+      "value": 10,
+      "priority": 14,
+      "priority_score": 28.3
+    },
+    {
+      "name": "AIVIZIA",
+      "stage": "beta",
+      "value": 5.0,
+      "priority": 4,
+      "priority_score": 16.8
+    },
+    {
+      "name": "Car-advisor",
+      "stage": "beta",
+      "value": 5.0,
+      "priority": 4,
+      "priority_score": 16.8
+    },
+    {
+      "name": "MCP-Vibe",
+      "stage": "beta",
+      "value": 3.0,
+      "priority": 0,
+      "priority_score": 11.8
+    }
+  ]
+}

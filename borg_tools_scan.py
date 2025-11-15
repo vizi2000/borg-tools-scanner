@@ -588,7 +588,7 @@ Zwróć TYLKO valid JSON z polami: description, declared_vs_actual, structure_su
                 return base
 
             payload = json.dumps({
-                "model": model or "anthropic/claude-3-haiku:beta",
+                "model": model or "deepseek/deepseek-r1:free",
                 "messages": [{"role": "user", "content": prompt}],
                 "temperature": 0.3,
                 "reasoning_enabled": True
@@ -1013,7 +1013,7 @@ def main():
 
     # Legacy LLM options (deprecated but kept for compatibility)
     ap.add_argument('--use-llm', choices=['openai', 'openrouter'], help='Legacy: refine suggestions with an LLM provider (use --skip-llm to disable new pipeline)')
-    ap.add_argument('--model', default='tngtech/deepseek-r1t2-chimera:free', help='LLM model id (OpenRouter or OpenAI)')
+    ap.add_argument('--model', default='deepseek/deepseek-r1:free', help='LLM model id (OpenRouter or OpenAI) - Default: DeepSeek-R1 Free (96%+ HumanEval, 163K context)')
 
     # New v2.0 flags
     ap.add_argument('--deep-scan', action='store_true', help='Enable deep code/deployment/doc analysis (Tasks 1A-C)')

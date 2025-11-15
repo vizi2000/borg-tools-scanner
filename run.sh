@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python3 /Users/wojciechwiesner/ai/Borg.tools_scan/borg_tools_scan.py --root /Users/wojciechwiesner/ai/ --use-llm openrouter
+python3 /Users/wojciechwiesner/ai/Borg.tools_scan/borg_tools_scan.py --root /Users/wojciechwiesner/ai/ --use-llm openrouter --model deepseek/deepseek-r1:free
